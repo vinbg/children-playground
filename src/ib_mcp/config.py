@@ -19,29 +19,10 @@ class IBConfig:
 
 
 @dataclass
-class NewsConfig:
-    """News API configuration."""
-
-    finnhub_api_key: str | None = None
-    alphavantage_api_key: str | None = None
-    cache_ttl: int = 300  # 5 minutes
-
-
-@dataclass
-class SentimentConfig:
-    """Sentiment analysis configuration."""
-
-    model: str = "finbert"  # "finbert" or "vader"
-    cache_ttl: int = 3600  # 1 hour
-
-
-@dataclass
 class Config:
     """Main configuration class."""
 
     ib: IBConfig = field(default_factory=IBConfig)
-    news: NewsConfig = field(default_factory=NewsConfig)
-    sentiment: SentimentConfig = field(default_factory=SentimentConfig)
     log_level: str = "INFO"
 
     @classmethod
@@ -60,21 +41,8 @@ class Config:
             readonly=os.getenv("IB_READONLY", "true").lower() == "true",
         )
 
-        news_config = NewsConfig(
-            finnhub_api_key=os.getenv("FINNHUB_API_KEY"),
-            alphavantage_api_key=os.getenv("ALPHAVANTAGE_API_KEY"),
-            cache_ttl=int(os.getenv("NEWS_CACHE_TTL", "300")),
-        )
-
-        sentiment_config = SentimentConfig(
-            model=os.getenv("SENTIMENT_MODEL", "finbert"),
-            cache_ttl=int(os.getenv("SENTIMENT_CACHE_TTL", "3600")),
-        )
-
         return cls(
             ib=ib_config,
-            news=news_config,
-            sentiment=sentiment_config,
             log_level=os.getenv("LOG_LEVEL", "INFO"),
         )
 

@@ -11,8 +11,6 @@ from mcp.types import Tool, TextContent
 
 from .config import get_config
 from .clients.ib_client import IBClient
-from .clients.news_client import NewsClient
-from .clients.sentiment import SentimentAnalyzer
 
 # Configure logging
 logging.basicConfig(
@@ -24,10 +22,8 @@ logger = logging.getLogger("ib-mcp-server")
 # Initialize server
 server = Server("ib-mcp-server")
 
-# Lazy-initialized clients
+# Lazy-initialized client
 _ib_client: IBClient | None = None
-_news_client: NewsClient | None = None
-_sentiment_analyzer: SentimentAnalyzer | None = None
 
 
 def get_ib_client() -> IBClient:
@@ -37,24 +33,6 @@ def get_ib_client() -> IBClient:
         config = get_config()
         _ib_client = IBClient(config.ib)
     return _ib_client
-
-
-def get_news_client() -> NewsClient:
-    """Get or create news client instance."""
-    global _news_client
-    if _news_client is None:
-        config = get_config()
-        _news_client = NewsClient(config.news)
-    return _news_client
-
-
-def get_sentiment_analyzer() -> SentimentAnalyzer:
-    """Get or create sentiment analyzer instance."""
-    global _sentiment_analyzer
-    if _sentiment_analyzer is None:
-        config = get_config()
-        _sentiment_analyzer = SentimentAnalyzer(config.sentiment)
-    return _sentiment_analyzer
 
 
 # =============================================================================
@@ -243,148 +221,10 @@ TOOLS = [
             "required": ["query"]
         }
     ),
-    # News Tools
-    Tool(
-        name="search_news",
-        description="Search financial news by symbol or keyword using Finnhub/Alpha Vantage.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "symbol": {
-                    "type": "string",
-                    "description": "Stock symbol to search news for (optional)"
-                },
-                "keywords": {
-                    "type": "string",
-                    "description": "Search keywords (optional)"
-                },
-                "category": {
-                    "type": "string",
-                    "description": "News category: general, forex, crypto, merger",
-                    "default": "general"
-                },
-                "from_date": {
-                    "type": "string",
-                    "description": "Start date YYYY-MM-DD (optional)"
-                },
-                "to_date": {
-                    "type": "string",
-                    "description": "End date YYYY-MM-DD (optional)"
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Max results",
-                    "default": 10
-                }
-            },
-            "required": []
-        }
-    ),
-    Tool(
-        name="get_company_news",
-        description="Get latest news specifically for a company/symbol.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "symbol": {
-                    "type": "string",
-                    "description": "Stock symbol"
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Max results",
-                    "default": 10
-                }
-            },
-            "required": ["symbol"]
-        }
-    ),
-    Tool(
-        name="get_market_news",
-        description="Get general market news and headlines.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "category": {
-                    "type": "string",
-                    "description": "Category: general, forex, crypto, merger",
-                    "default": "general"
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Max results",
-                    "default": 10
-                }
-            },
-            "required": []
-        }
-    ),
-    # Sentiment Tools
-    Tool(
-        name="analyze_news_sentiment",
-        description="Analyze sentiment of news articles for a symbol using FinBERT.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "symbol": {
-                    "type": "string",
-                    "description": "Stock symbol"
-                },
-                "days_back": {
-                    "type": "integer",
-                    "description": "Days of news to analyze",
-                    "default": 7
-                }
-            },
-            "required": ["symbol"]
-        }
-    ),
-    Tool(
-        name="get_social_sentiment",
-        description="Get social media sentiment metrics from Finnhub.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "symbol": {
-                    "type": "string",
-                    "description": "Stock symbol"
-                }
-            },
-            "required": ["symbol"]
-        }
-    ),
-    Tool(
-        name="analyze_text_sentiment",
-        description="Analyze sentiment of custom text using financial sentiment models.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "text": {
-                    "type": "string",
-                    "description": "Text to analyze"
-                }
-            },
-            "required": ["text"]
-        }
-    ),
-    Tool(
-        name="get_insider_sentiment",
-        description="Get insider trading sentiment and transactions.",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "symbol": {
-                    "type": "string",
-                    "description": "Stock symbol"
-                }
-            },
-            "required": ["symbol"]
-        }
-    ),
     # Utility Tools
     Tool(
         name="check_connection_status",
-        description="Check connection status to IB Gateway/TWS and news APIs.",
+        description="Check connection status to IB Gateway/TWS.",
         inputSchema={
             "type": "object",
             "properties": {},
@@ -472,58 +312,9 @@ async def handle_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
             limit=args.get("limit", 10)
         )
 
-    # News Tools
-    elif name == "search_news":
-        return await get_news_client().search_news(
-            symbol=args.get("symbol"),
-            keywords=args.get("keywords"),
-            category=args.get("category", "general"),
-            from_date=args.get("from_date"),
-            to_date=args.get("to_date"),
-            limit=args.get("limit", 10)
-        )
-
-    elif name == "get_company_news":
-        return await get_news_client().get_company_news(
-            symbol=args["symbol"],
-            limit=args.get("limit", 10)
-        )
-
-    elif name == "get_market_news":
-        return await get_news_client().get_market_news(
-            category=args.get("category", "general"),
-            limit=args.get("limit", 10)
-        )
-
-    # Sentiment Tools
-    elif name == "analyze_news_sentiment":
-        news = await get_news_client().get_company_news(
-            symbol=args["symbol"],
-            limit=20
-        )
-        return await get_sentiment_analyzer().analyze_news_sentiment(
-            news_items=news.get("articles", []),
-            symbol=args["symbol"]
-        )
-
-    elif name == "get_social_sentiment":
-        return await get_news_client().get_social_sentiment(args["symbol"])
-
-    elif name == "analyze_text_sentiment":
-        return await get_sentiment_analyzer().analyze_text(args["text"])
-
-    elif name == "get_insider_sentiment":
-        return await get_news_client().get_insider_sentiment(args["symbol"])
-
     # Utility Tools
     elif name == "check_connection_status":
-        ib_status = await get_ib_client().check_connection()
-        news_status = get_news_client().check_api_keys()
-        return {
-            "ib_connection": ib_status,
-            "news_apis": news_status,
-            "sentiment_model": get_config().sentiment.model,
-        }
+        return await get_ib_client().check_connection()
 
     else:
         raise ValueError(f"Unknown tool: {name}")

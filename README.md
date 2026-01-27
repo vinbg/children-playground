@@ -1,6 +1,6 @@
 # IB Portfolio Tracker - MCP Server
 
-An MCP (Model Context Protocol) server that connects Claude AI to your Interactive Brokers account for real-time portfolio tracking, news, and sentiment analysis.
+An MCP (Model Context Protocol) server that connects Claude AI to your Interactive Brokers account for real-time portfolio tracking.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -9,17 +9,17 @@ An MCP (Model Context Protocol) server that connects Claude AI to your Interacti
 
 Once set up, you can ask Claude things like:
 
-- 💰 **"What's my portfolio value?"**
-- 📊 **"Show my positions with P&L"**
-- 📰 **"Get the latest news on AAPL"**
-- 🎯 **"What's the sentiment around Tesla?"**
-- 📈 **"Show me historical data for SPY"**
+- "What's my portfolio value?"
+- "Show my positions with P&L"
+- "What were my trades today?"
+- "Get a quote for AAPL"
+- "Show historical data for SPY"
 
-All responses come directly from your Interactive Brokers account and financial news APIs.
+All responses come directly from your Interactive Brokers account.
 
 ---
 
-## 🚀 Quick Start (5 minutes)
+## Quick Start (5 minutes)
 
 ### Prerequisites
 
@@ -42,15 +42,7 @@ IB Gateway is a lightweight app that allows API access to your IBKR account.
 
 > **Note:** IBKR Desktop app does NOT support API connections. You need IB Gateway or TWS.
 
-### Step 2: Get a Finnhub API Key (Free)
-
-Finnhub provides financial news and sentiment data.
-
-1. Sign up at: https://finnhub.io/register
-2. Copy your API key from the dashboard
-3. Free tier: 60 requests/minute (plenty for personal use)
-
-### Step 3: Install the MCP Server
+### Step 2: Install the MCP Server
 
 ```bash
 # Clone or download this repository
@@ -65,9 +57,9 @@ The setup script will:
 - Create a Python virtual environment
 - Install all dependencies
 - Guide you through configuration
-- Test your connections
+- Test your IB connection
 
-### Step 4: Configure Claude
+### Step 3: Configure Claude
 
 #### For Claude Desktop (macOS)
 
@@ -107,7 +99,7 @@ Add to `~/.mcp.json`:
 
 ---
 
-## 📋 Available Tools
+## Available Tools
 
 ### Portfolio Tools
 | Tool | Description |
@@ -127,40 +119,21 @@ Add to `~/.mcp.json`:
 | `get_contract_details` | Symbol info, trading hours |
 | `search_symbols` | Find contracts by name |
 
-### News & Sentiment Tools
-| Tool | Description |
-|------|-------------|
-| `search_news` | Search by symbol or keyword |
-| `get_company_news` | Company-specific headlines |
-| `get_market_news` | General market news |
-| `analyze_news_sentiment` | AI sentiment analysis on news |
-| `get_social_sentiment` | Reddit/Twitter sentiment metrics |
-| `analyze_text_sentiment` | Analyze any custom text |
-| `get_insider_sentiment` | Insider trading signals |
-
 ### Utility Tools
 | Tool | Description |
 |------|-------------|
-| `check_connection_status` | Check IB and API connections |
+| `check_connection_status` | Check IB connection |
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 All settings are in the `.env` file:
 
 ```bash
 # Interactive Brokers Connection
 IB_HOST=127.0.0.1
-IB_PORT=4001              # 4001=Gateway Paper, 4002=Gateway Live, 7497=TWS Paper, 7496=TWS Live
-IB_CLIENT_ID=1
-
-# News APIs
-FINNHUB_API_KEY=your_finnhub_key_here
-ALPHAVANTAGE_API_KEY=     # Optional fallback
-
-# Sentiment Model
-SENTIMENT_MODEL=vader     # "vader" (fast) or "finbert" (accurate, downloads 500MB model)
+IB_PORT=4001              # 4001=Gateway Paper, 4002=Gateway Live
 
 # Logging
 LOG_LEVEL=INFO
@@ -177,23 +150,19 @@ LOG_LEVEL=INFO
 
 ---
 
-## 🔒 Security
+## Security
 
 This server is **READ-ONLY** by default:
 
 - ✅ No order placement capabilities
 - ✅ No account modification
-- ✅ API keys stored locally in `.env` (never committed)
 - ✅ Works with IB's "Read-Only API" setting
 
-Your credentials never leave your machine. The MCP server runs locally and communicates only with:
-- IB Gateway on localhost
-- Finnhub API (for news)
-- Alpha Vantage API (optional, for backup news)
+Your credentials never leave your machine. The MCP server runs locally and communicates only with IB Gateway on localhost.
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### "Cannot connect to IB Gateway"
 
@@ -202,26 +171,11 @@ Your credentials never leave your machine. The MCP server runs locally and commu
 3. **API enabled?** In IB Gateway: Configure → Settings → API → Settings
 4. **Firewall?** Ensure localhost connections aren't blocked
 
-### "Invalid API key" (Finnhub)
-
-1. Check your key at https://finnhub.io/dashboard
-2. Verify it's correctly copied to `.env`
-3. Free tier limit: 60 requests/minute
-
 ### "Tool not found" in Claude
 
 1. Restart Claude Desktop completely (Cmd+Q)
 2. Check the config file path is correct
 3. Verify Python path: `which python3` in terminal
-
-### FinBERT model slow/not loading
-
-The FinBERT model is ~500MB and downloads on first use. For faster startup:
-
-```bash
-# Use VADER instead (lightweight, no download)
-SENTIMENT_MODEL=vader
-```
 
 ### Test the connection manually
 
@@ -245,7 +199,7 @@ asyncio.run(test())
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ib-mcp-server/
@@ -258,25 +212,17 @@ ib-mcp-server/
     ├── server.py         # MCP server entry point
     ├── config.py         # Configuration management
     └── clients/
-        ├── ib_client.py    # Interactive Brokers API
-        ├── news_client.py  # Finnhub/Alpha Vantage
-        └── sentiment.py    # Sentiment analysis
+        └── ib_client.py  # Interactive Brokers API
 ```
 
 ---
 
-## 🤝 Contributing
-
-Feel free to submit issues and pull requests!
-
----
-
-## 📄 License
+## License
 
 MIT License - feel free to use, modify, and share.
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This software is for informational purposes only. It does not constitute financial advice. Always verify information independently before making investment decisions. The authors are not responsible for any financial losses incurred through the use of this software.
