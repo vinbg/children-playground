@@ -62,7 +62,16 @@ fi
 
 if [ ! -f ".env" ]; then
     echo ""
-    echo -e "${YELLOW}IB Gateway/TWS Port Configuration:${NC}"
+    echo -e "${YELLOW}Let's configure your API keys:${NC}"
+    echo ""
+
+    # Finnhub API Key
+    echo "Finnhub API Key (get free at https://finnhub.io/register):"
+    read -p "  Enter your Finnhub API key: " FINNHUB_KEY
+
+    # IB Port
+    echo ""
+    echo "IB Gateway/TWS Port:"
     echo "  4001 = IB Gateway Paper Trading (recommended)"
     echo "  4002 = IB Gateway Live Trading"
     echo "  7497 = TWS Paper Trading"
@@ -77,6 +86,16 @@ IB_HOST=127.0.0.1
 IB_PORT=$IB_PORT
 IB_CLIENT_ID=1
 
+# News API
+FINNHUB_API_KEY=$FINNHUB_KEY
+
+# Sentiment Model: "vader" (fast) or "finbert" (accurate, 500MB download)
+SENTIMENT_MODEL=vader
+
+# Cache TTL in seconds
+NEWS_CACHE_TTL=300
+SENTIMENT_CACHE_TTL=3600
+
 # Logging
 LOG_LEVEL=INFO
 EOF
@@ -85,7 +104,27 @@ EOF
 fi
 
 echo ""
-echo -e "${BLUE}Step 5: Testing IB Gateway connection...${NC}"
+echo -e "${BLUE}Step 5: Testing Finnhub API...${NC}"
+source .venv/bin/activate
+python3 -c "
+import os
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.getenv('FINNHUB_API_KEY', '')
+if not api_key or api_key == 'your_finnhub_api_key_here':
+    print('⚠ No Finnhub API key configured (news features will be limited)')
+    exit(0)
+try:
+    import finnhub
+    client = finnhub.Client(api_key=api_key)
+    news = client.general_news('general', min_id=0)
+    print(f'✓ Finnhub API working ({len(news)} articles fetched)')
+except Exception as e:
+    print(f'✗ Finnhub API error: {e}')
+" 2>/dev/null || echo -e "${YELLOW}⚠ Could not test Finnhub API${NC}"
+
+echo ""
+echo -e "${BLUE}Step 6: Testing IB Gateway connection...${NC}"
 python3 -c "
 import asyncio
 import os

@@ -1,6 +1,6 @@
 # IB Portfolio Tracker - MCP Server
 
-An MCP (Model Context Protocol) server that connects Claude AI to your Interactive Brokers account for real-time portfolio tracking.
+An MCP (Model Context Protocol) server that connects Claude AI to your Interactive Brokers account for real-time portfolio tracking, financial news, and sentiment analysis.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -11,15 +11,15 @@ Once set up, you can ask Claude things like:
 
 - "What's my portfolio value?"
 - "Show my positions with P&L"
-- "What were my trades today?"
-- "Get a quote for AAPL"
+- "Get the latest news on AAPL"
+- "What's the sentiment around Tesla?"
 - "Show historical data for SPY"
 
-All responses come directly from your Interactive Brokers account.
+All responses come directly from your Interactive Brokers account and Finnhub API.
 
 ---
 
-## Quick Start (5 minutes)
+## Quick Start
 
 ### Prerequisites
 
@@ -42,10 +42,19 @@ IB Gateway is a lightweight app that allows API access to your IBKR account.
 
 > **Note:** IBKR Desktop app does NOT support API connections. You need IB Gateway or TWS.
 
-### Step 2: Install the MCP Server
+### Step 2: Get a Finnhub API Key (Free)
+
+Finnhub provides financial news and sentiment data.
+
+1. Sign up at: https://finnhub.io/register
+2. Copy your API key from the dashboard
+3. Free tier: 60 requests/minute (plenty for personal use)
+
+### Step 3: Install the MCP Server
 
 ```bash
 # Clone or download this repository
+git clone https://github.com/vinbg/ib-mcp-server.git
 cd ib-mcp-server
 
 # Run the setup script
@@ -57,11 +66,9 @@ The setup script will:
 - Create a Python virtual environment
 - Install all dependencies
 - Guide you through configuration
-- Test your IB connection
+- Test your connections
 
-### Step 3: Configure Claude
-
-#### For Claude Desktop (macOS)
+### Step 4: Configure Claude Desktop
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
@@ -81,9 +88,14 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 Then restart Claude Desktop (Cmd+Q, then reopen).
 
-#### For Claude Code (VS Code)
+---
 
-Add to `~/.mcp.json`:
+## Optional: Add LunarCrush for Crypto Sentiment
+
+LunarCrush provides social sentiment data for cryptocurrencies. To add it alongside this server:
+
+1. Get an API key at: https://lunarcrush.com/developers
+2. Add to your Claude Desktop config:
 
 ```json
 {
@@ -92,16 +104,25 @@ Add to `~/.mcp.json`:
       "command": "/FULL/PATH/TO/ib-mcp-server/.venv/bin/python",
       "args": ["-m", "ib_mcp.server"],
       "cwd": "/FULL/PATH/TO/ib-mcp-server"
+    },
+    "LunarCrush": {
+      "type": "http",
+      "url": "https://lunarcrush.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_LUNARCRUSH_API_KEY"
+      }
     }
   }
 }
 ```
 
+Now you can ask Claude about crypto social sentiment alongside your IBKR portfolio!
+
 ---
 
 ## Available Tools
 
-### Portfolio Tools
+### Portfolio Tools (requires IB Gateway)
 | Tool | Description |
 |------|-------------|
 | `get_account_summary` | Net liquidation value, buying power, cash, margin |
@@ -111,7 +132,7 @@ Add to `~/.mcp.json`:
 | `get_open_orders` | List pending orders |
 | `get_executions` | Recent trade fills |
 
-### Market Data Tools
+### Market Data Tools (requires IB Gateway)
 | Tool | Description |
 |------|-------------|
 | `get_quote` | Real-time/delayed quotes (bid, ask, last, volume) |
@@ -119,10 +140,21 @@ Add to `~/.mcp.json`:
 | `get_contract_details` | Symbol info, trading hours |
 | `search_symbols` | Find contracts by name |
 
+### News & Sentiment Tools (requires Finnhub API)
+| Tool | Description |
+|------|-------------|
+| `search_news` | Search by symbol or keyword |
+| `get_company_news` | Company-specific headlines |
+| `get_market_news` | General market news |
+| `analyze_news_sentiment` | AI sentiment analysis on news |
+| `get_social_sentiment` | Reddit/Twitter sentiment metrics |
+| `analyze_text_sentiment` | Analyze any custom text |
+| `get_insider_sentiment` | Insider trading signals |
+
 ### Utility Tools
 | Tool | Description |
 |------|-------------|
-| `check_connection_status` | Check IB connection |
+| `check_connection_status` | Check IB and API connections |
 
 ---
 
@@ -134,6 +166,12 @@ All settings are in the `.env` file:
 # Interactive Brokers Connection
 IB_HOST=127.0.0.1
 IB_PORT=4001              # 4001=Gateway Paper, 4002=Gateway Live
+
+# News API
+FINNHUB_API_KEY=your_finnhub_key_here
+
+# Sentiment Model
+SENTIMENT_MODEL=vader     # "vader" (fast) or "finbert" (accurate, 500MB model)
 
 # Logging
 LOG_LEVEL=INFO
@@ -154,11 +192,14 @@ LOG_LEVEL=INFO
 
 This server is **READ-ONLY** by default:
 
-- ✅ No order placement capabilities
-- ✅ No account modification
-- ✅ Works with IB's "Read-Only API" setting
+- No order placement capabilities
+- No account modification
+- API keys stored locally in `.env` (never committed to git)
+- Works with IB's "Read-Only API" setting
 
-Your credentials never leave your machine. The MCP server runs locally and communicates only with IB Gateway on localhost.
+Your credentials never leave your machine. The MCP server runs locally and communicates only with:
+- IB Gateway on localhost
+- Finnhub API (for news)
 
 ---
 
@@ -170,6 +211,12 @@ Your credentials never leave your machine. The MCP server runs locally and commu
 2. **Correct port?** Verify port in IB Gateway matches your `.env`
 3. **API enabled?** In IB Gateway: Configure → Settings → API → Settings
 4. **Firewall?** Ensure localhost connections aren't blocked
+
+### "Invalid API key" (Finnhub)
+
+1. Check your key at https://finnhub.io/dashboard
+2. Verify it's correctly copied to `.env`
+3. Free tier limit: 60 requests/minute
 
 ### "Tool not found" in Claude
 
@@ -206,13 +253,15 @@ ib-mcp-server/
 ├── setup.sh              # Easy setup script
 ├── pyproject.toml        # Python dependencies
 ├── .env.example          # Configuration template
-├── .env                  # Your configuration (create from .env.example)
+├── .env                  # Your configuration (gitignored)
 ├── README.md             # This file
 └── src/ib_mcp/
     ├── server.py         # MCP server entry point
     ├── config.py         # Configuration management
     └── clients/
-        └── ib_client.py  # Interactive Brokers API
+        ├── ib_client.py    # Interactive Brokers API
+        ├── news_client.py  # Finnhub API
+        └── sentiment.py    # Sentiment analysis
 ```
 
 ---
