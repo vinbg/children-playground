@@ -189,8 +189,8 @@ class IBClient:
         if not target_account:
             return {"error": "No account found"}
 
-        # Get account values for P&L
-        account_values = await self.ib.accountValuesAsync(target_account)
+        # Get account summary for P&L data
+        summary = await self.ib.accountSummaryAsync(target_account)
 
         pnl_data = {
             "account_id": target_account,
@@ -201,17 +201,28 @@ class IBClient:
         pnl_tags = [
             "UnrealizedPnL",
             "RealizedPnL",
-            "DailyPnL",
             "NetLiquidation",
             "TotalCashValue",
             "GrossPositionValue",
         ]
 
-        for value in account_values:
-            if value.tag in pnl_tags:
-                if value.tag not in pnl_data:
-                    pnl_data[value.tag] = {}
-                pnl_data[value.tag][value.currency] = value.value
+        for item in summary:
+            if item.tag in pnl_tags:
+                if item.tag not in pnl_data:
+                    pnl_data[item.tag] = {}
+                pnl_data[item.tag][item.currency] = item.value
+
+        # Also try to get PnL via subscription (for daily P&L)
+        try:
+            pnl = self.ib.reqPnL(target_account)
+            await asyncio.sleep(1)  # Wait for data
+            if pnl:
+                pnl_data["DailyPnL"] = pnl.dailyPnL
+                pnl_data["UnrealizedPnL_Total"] = pnl.unrealizedPnL
+                pnl_data["RealizedPnL_Total"] = pnl.realizedPnL
+            self.ib.cancelPnL(target_account)
+        except Exception as e:
+            logger.warning(f"Could not get PnL subscription: {e}")
 
         return pnl_data
 
