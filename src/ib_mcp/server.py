@@ -243,7 +243,7 @@ TOOLS = [
             "required": ["query"]
         }
     ),
-    # News Tools
+    # News Tools (Finnhub)
     Tool(
         name="search_news",
         description="Search financial news by symbol or keyword using Finnhub.",
@@ -270,6 +270,63 @@ TOOLS = [
                 }
             },
             "required": []
+        }
+    ),
+    # News Tools (IB Native)
+    Tool(
+        name="get_ib_news_providers",
+        description="List available news providers from Interactive Brokers (e.g., Reuters, Dow Jones, Briefing.com).",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    ),
+    Tool(
+        name="get_ib_news",
+        description="Get historical news articles for a symbol directly from Interactive Brokers. Includes premium sources like Reuters, Dow Jones, and Briefing.com.",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "Stock symbol (e.g., AAPL)"
+                },
+                "provider_codes": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Specific news provider codes (e.g., ['BRFG', 'DJ-N']). If not specified, uses all available providers."
+                },
+                "days_back": {
+                    "type": "integer",
+                    "description": "Days of news history to retrieve",
+                    "default": 7
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max number of articles",
+                    "default": 20
+                }
+            },
+            "required": ["symbol"]
+        }
+    ),
+    Tool(
+        name="get_ib_news_article",
+        description="Get the full text of a news article from Interactive Brokers using its article ID.",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "provider_code": {
+                    "type": "string",
+                    "description": "News provider code (e.g., 'BRFG')"
+                },
+                "article_id": {
+                    "type": "string",
+                    "description": "Article ID from get_ib_news results"
+                }
+            },
+            "required": ["provider_code", "article_id"]
         }
     ),
     Tool(
@@ -373,6 +430,31 @@ TOOLS = [
             "required": ["symbol"]
         }
     ),
+    # Comprehensive News Tool (combines all sources)
+    Tool(
+        name="get_comprehensive_news",
+        description="Get a comprehensive news analysis for a symbol combining: IB news (Reuters, Dow Jones), Finnhub news, social sentiment (Reddit/Twitter), insider sentiment, and AI-analyzed sentiment scores. This is the recommended tool for complete news coverage.",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "Stock symbol (e.g., AAPL)"
+                },
+                "days_back": {
+                    "type": "integer",
+                    "description": "Days of news history to retrieve",
+                    "default": 7
+                },
+                "include_full_articles": {
+                    "type": "boolean",
+                    "description": "Include full article text (slower but more detailed)",
+                    "default": False
+                }
+            },
+            "required": ["symbol"]
+        }
+    ),
     # Utility Tools
     Tool(
         name="check_connection_status",
@@ -384,6 +466,189 @@ TOOLS = [
         }
     ),
 ]
+
+
+async def get_comprehensive_news(
+    symbol: str,
+    days_back: int = 7,
+    include_full_articles: bool = False
+) -> dict[str, Any]:
+    """
+    Get comprehensive news analysis combining all available sources.
+
+    Fetches in parallel:
+    - IB News (Reuters, Dow Jones, Briefing.com, etc.)
+    - Finnhub company news (if API key configured)
+    - Social sentiment (Reddit/Twitter) (if Finnhub configured)
+    - Insider sentiment (if Finnhub configured)
+    - AI-analyzed sentiment scores
+    """
+    from datetime import datetime
+
+    symbol = symbol.upper()
+
+    # Check if Finnhub is configured
+    news_client = get_news_client()
+    finnhub_configured = bool(news_client.config.finnhub_api_key)
+
+    # Always fetch IB news
+    tasks = [
+        get_ib_client().get_historical_news(
+            symbol=symbol,
+            days_back=days_back,
+            limit=15
+        )
+    ]
+    task_names = ["ib_news"]
+
+    # Only fetch Finnhub data if API key is configured
+    if finnhub_configured:
+        tasks.extend([
+            news_client.get_company_news(symbol=symbol, limit=15),
+            news_client.get_social_sentiment(symbol),
+            news_client.get_insider_sentiment(symbol),
+        ])
+        task_names.extend(["finnhub_news", "social_sentiment", "insider_sentiment"])
+
+    # Wait for all tasks to complete
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    # Parse results
+    parsed_results = {}
+    for i, name in enumerate(task_names):
+        if isinstance(results[i], Exception):
+            parsed_results[name] = {"articles": [], "error": str(results[i])} if "news" in name else {"error": str(results[i])}
+        else:
+            parsed_results[name] = results[i]
+
+    ib_news = parsed_results.get("ib_news", {"articles": []})
+    finnhub_news = parsed_results.get("finnhub_news", {"articles": [], "error": "Finnhub API key not configured"})
+    social_sentiment = parsed_results.get("social_sentiment", {"error": "Finnhub API key not configured"})
+    insider_sentiment = parsed_results.get("insider_sentiment", {"error": "Finnhub API key not configured"})
+
+    # Combine all headlines for sentiment analysis
+    all_headlines = []
+
+    # Add IB headlines
+    for article in ib_news.get("articles", []):
+        if article.get("headline"):
+            all_headlines.append({
+                "text": article["headline"],
+                "source": f"IB:{article.get('provider', 'unknown')}",
+                "datetime": article.get("datetime")
+            })
+
+    # Add Finnhub headlines
+    for article in finnhub_news.get("articles", []):
+        if article.get("headline"):
+            all_headlines.append({
+                "text": article["headline"],
+                "source": f"Finnhub:{article.get('source', 'unknown')}",
+                "datetime": article.get("datetime")
+            })
+
+    # Analyze sentiment on combined headlines
+    sentiment_analysis = {"error": "No headlines to analyze"}
+    if all_headlines:
+        try:
+            sentiment_analysis = await get_sentiment_analyzer().analyze_news_sentiment(
+                news_items=[{"headline": h["text"]} for h in all_headlines],
+                symbol=symbol
+            )
+        except Exception as e:
+            sentiment_analysis = {"error": str(e)}
+
+    # Calculate social sentiment summary
+    social_summary = {}
+    if "error" not in social_sentiment:
+        reddit_summary = social_sentiment.get("reddit_summary", {})
+        twitter_summary = social_sentiment.get("twitter_summary", {})
+
+        total_mentions = (
+            reddit_summary.get("total_mentions", 0) +
+            twitter_summary.get("total_mentions", 0)
+        )
+        positive_mentions = (
+            reddit_summary.get("positive_mentions", 0) +
+            twitter_summary.get("positive_mentions", 0)
+        )
+        negative_mentions = (
+            reddit_summary.get("negative_mentions", 0) +
+            twitter_summary.get("negative_mentions", 0)
+        )
+
+        if total_mentions > 0:
+            social_summary = {
+                "total_mentions": total_mentions,
+                "positive_mentions": positive_mentions,
+                "negative_mentions": negative_mentions,
+                "positive_ratio": round(positive_mentions / total_mentions, 3) if total_mentions else 0,
+                "sentiment_label": "bullish" if positive_mentions > negative_mentions else "bearish" if negative_mentions > positive_mentions else "neutral"
+            }
+
+    # Build comprehensive result
+    result = {
+        "symbol": symbol,
+        "timestamp": datetime.now().isoformat(),
+        "days_analyzed": days_back,
+
+        # Summary section
+        "summary": {
+            "total_articles": len(all_headlines),
+            "ib_articles": len(ib_news.get("articles", [])),
+            "finnhub_articles": len(finnhub_news.get("articles", [])),
+            "ai_sentiment": sentiment_analysis.get("overall_sentiment", sentiment_analysis.get("error")),
+            "ai_sentiment_score": sentiment_analysis.get("average_score"),
+            "social_sentiment": social_summary.get("sentiment_label", "unavailable"),
+            "social_mentions": social_summary.get("total_mentions", 0),
+            "insider_sentiment": insider_sentiment.get("summary", {}).get("mspr", "unavailable"),
+        },
+
+        # Detailed sections
+        "ib_news": {
+            "source": "Interactive Brokers",
+            "providers": ib_news.get("providers_used", []),
+            "articles": ib_news.get("articles", []),
+            "error": ib_news.get("error")
+        },
+
+        "finnhub_news": {
+            "source": "Finnhub",
+            "articles": finnhub_news.get("articles", []),
+            "error": finnhub_news.get("error")
+        },
+
+        "sentiment_analysis": {
+            "model": get_config().sentiment.model,
+            "overall": sentiment_analysis.get("overall_sentiment"),
+            "average_score": sentiment_analysis.get("average_score"),
+            "analyzed_count": sentiment_analysis.get("analyzed_count", 0),
+            "breakdown": sentiment_analysis.get("sentiment_breakdown", {}),
+        },
+
+        "social_sentiment": {
+            "source": "Finnhub (Reddit/Twitter)",
+            "summary": social_summary if social_summary else None,
+            "reddit": social_sentiment.get("reddit_summary"),
+            "twitter": social_sentiment.get("twitter_summary"),
+            "error": social_sentiment.get("error")
+        },
+
+        "insider_sentiment": {
+            "source": "Finnhub",
+            "mspr": insider_sentiment.get("summary", {}).get("mspr"),
+            "change": insider_sentiment.get("summary", {}).get("change"),
+            "period": insider_sentiment.get("summary", {}).get("period"),
+            "error": insider_sentiment.get("error")
+        }
+    }
+
+    # Clean up None errors
+    for section in ["ib_news", "finnhub_news", "social_sentiment", "insider_sentiment"]:
+        if result[section].get("error") is None:
+            del result[section]["error"]
+
+    return result
 
 
 @server.list_tools()
@@ -485,6 +750,24 @@ async def handle_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
             limit=args.get("limit", 10)
         )
 
+    # IB Native News Tools
+    elif name == "get_ib_news_providers":
+        return await get_ib_client().get_news_providers()
+
+    elif name == "get_ib_news":
+        return await get_ib_client().get_historical_news(
+            symbol=args["symbol"],
+            provider_codes=args.get("provider_codes"),
+            days_back=args.get("days_back", 7),
+            limit=args.get("limit", 20)
+        )
+
+    elif name == "get_ib_news_article":
+        return await get_ib_client().get_news_article(
+            provider_code=args["provider_code"],
+            article_id=args["article_id"]
+        )
+
     # Sentiment Tools
     elif name == "analyze_news_sentiment":
         news = await get_news_client().get_company_news(
@@ -504,6 +787,14 @@ async def handle_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
 
     elif name == "get_insider_sentiment":
         return await get_news_client().get_insider_sentiment(args["symbol"])
+
+    # Comprehensive News (combines all sources)
+    elif name == "get_comprehensive_news":
+        return await get_comprehensive_news(
+            symbol=args["symbol"],
+            days_back=args.get("days_back", 7),
+            include_full_articles=args.get("include_full_articles", False)
+        )
 
     # Utility Tools
     elif name == "check_connection_status":

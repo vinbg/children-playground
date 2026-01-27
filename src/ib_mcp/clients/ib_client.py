@@ -515,3 +515,159 @@ class IBClient:
             "results": results,
             "count": len(results),
         }
+
+    # =========================================================================
+    # News Methods (IB Native)
+    # =========================================================================
+
+    async def get_news_providers(self) -> dict[str, Any]:
+        """Get list of available news providers from IB."""
+        await self.ensure_connected()
+
+        try:
+            providers = await self.ib.reqNewsProvidersAsync()
+
+            result = {
+                "providers": [],
+                "count": len(providers),
+                "timestamp": datetime.now().isoformat(),
+            }
+
+            for provider in providers:
+                result["providers"].append({
+                    "code": provider.code,
+                    "name": provider.name,
+                })
+
+            return result
+
+        except Exception as e:
+            logger.error(f"Failed to get news providers: {e}")
+            return {
+                "error": str(e),
+                "providers": [],
+                "count": 0,
+            }
+
+    async def get_historical_news(
+        self,
+        symbol: str,
+        provider_codes: list[str] | None = None,
+        days_back: int = 7,
+        limit: int = 20,
+    ) -> dict[str, Any]:
+        """Get historical news articles for a symbol from IB.
+
+        Args:
+            symbol: Stock symbol (e.g., AAPL)
+            provider_codes: List of news provider codes (e.g., ["BRFG", "DJ-N"]).
+                           If None, uses all available providers.
+            days_back: Number of days of news history to retrieve
+            limit: Maximum number of articles to return
+        """
+        await self.ensure_connected()
+
+        # Create contract for the symbol
+        contract = Stock(symbol.upper(), "SMART", "USD")
+        qualified = await self.ib.qualifyContractsAsync(contract)
+
+        if not qualified:
+            return {"error": f"Could not find contract for symbol: {symbol}"}
+
+        contract = qualified[0]
+
+        # Get available providers if none specified
+        if not provider_codes:
+            providers = await self.ib.reqNewsProvidersAsync()
+            provider_codes = [p.code for p in providers] if providers else []
+
+        if not provider_codes:
+            return {
+                "symbol": symbol.upper(),
+                "error": "No news providers available",
+                "articles": [],
+                "count": 0,
+            }
+
+        # Calculate date range
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days_back)
+
+        try:
+            # Request historical news
+            headlines = await self.ib.reqHistoricalNewsAsync(
+                conId=contract.conId,
+                providerCodes="+".join(provider_codes),
+                startDateTime=start_date.strftime("%Y-%m-%d %H:%M:%S"),
+                endDateTime=end_date.strftime("%Y-%m-%d %H:%M:%S"),
+                totalResults=limit,
+            )
+
+            articles = []
+            for headline in headlines:
+                articles.append({
+                    "headline": headline.headline,
+                    "provider": headline.providerCode,
+                    "datetime": headline.time.isoformat() if headline.time else None,
+                    "article_id": headline.articleId,
+                })
+
+            return {
+                "symbol": symbol.upper(),
+                "source": "interactive_brokers",
+                "providers_used": provider_codes,
+                "articles": articles,
+                "count": len(articles),
+                "date_range": {
+                    "from": start_date.isoformat(),
+                    "to": end_date.isoformat(),
+                },
+                "timestamp": datetime.now().isoformat(),
+            }
+
+        except Exception as e:
+            logger.error(f"Failed to get IB news for {symbol}: {e}")
+            return {
+                "symbol": symbol.upper(),
+                "error": str(e),
+                "articles": [],
+                "count": 0,
+            }
+
+    async def get_news_article(self, provider_code: str, article_id: str) -> dict[str, Any]:
+        """Get the full text of a news article from IB.
+
+        Args:
+            provider_code: News provider code (e.g., "BRFG")
+            article_id: Article ID from historical news
+        """
+        await self.ensure_connected()
+
+        try:
+            article = await self.ib.reqNewsArticleAsync(
+                providerCode=provider_code,
+                articleId=article_id,
+            )
+
+            if not article:
+                return {
+                    "error": "Article not found",
+                    "provider_code": provider_code,
+                    "article_id": article_id,
+                }
+
+            return {
+                "provider_code": provider_code,
+                "article_id": article_id,
+                "article_type": article.articleType,
+                "article_text": article.articleText,
+                "timestamp": datetime.now().isoformat(),
+            }
+
+        except Exception as e:
+            logger.error(f"Failed to get news article {article_id}: {e}")
+            return {
+                "error": str(e),
+                "provider_code": provider_code,
+                "article_id": article_id,
+            }
