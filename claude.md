@@ -34,7 +34,6 @@ ib-mcp-server/
 │       ├── ib_client.py     # Interactive Brokers API wrapper
 │       ├── news_client.py   # Finnhub news API client
 │       └── sentiment.py     # Sentiment analysis (VADER + FinBERT)
-├── tests/                   # Test suite
 ├── .env.example             # Configuration template
 ├── pyproject.toml           # Python project config
 ├── setup.sh                 # Mac/Linux setup script
@@ -115,9 +114,9 @@ ib-mcp-server/
 ./setup.sh
 ```
 
-### Windows (PowerShell)
-```powershell
-.\setup.ps1
+### Windows
+```cmd
+setup.bat
 ```
 
 Both scripts will:
@@ -193,23 +192,6 @@ Once set up, try asking Claude:
 - "What news providers are available from IB?"
 - "Show me Finnhub news for Microsoft"
 - "What's the Reddit sentiment on GME?"
-
-## Development
-
-### Install dev dependencies
-```bash
-pip install -e ".[dev]"
-```
-
-### Run tests
-```bash
-pytest
-```
-
-### Lint code
-```bash
-ruff check src/
-```
 
 ## Architecture Notes
 

@@ -19,14 +19,6 @@ dependencies = [
     "cachetools>=5.3.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-mock>=3.10.0",
-    "ruff>=0.1.0",
-]
-
 [project.scripts]
 ib-mcp-server = "ib_mcp.server:main"
 
@@ -40,7 +32,3 @@ packages = ["src/ib_mcp"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-testpaths = ["tests"]
