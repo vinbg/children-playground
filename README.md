@@ -11,11 +11,12 @@ Once set up, you can ask Claude things like:
 
 - "What's my portfolio value?"
 - "Show my positions with P&L"
-- "Get the latest news on AAPL"
+- "Give me a full news analysis for NVDA" (combines IB + Finnhub + sentiment)
 - "What's the sentiment around Tesla?"
 - "Show historical data for SPY"
+- "What news providers are available from IB?"
 
-All responses come directly from your Interactive Brokers account and Finnhub API.
+All responses come directly from your Interactive Brokers account, IB news feeds (Reuters, Dow Jones, etc.), and optionally Finnhub API.
 
 ---
 
@@ -23,7 +24,7 @@ All responses come directly from your Interactive Brokers account and Finnhub AP
 
 ### Prerequisites
 
-- **macOS or Linux** (Windows may work but untested)
+- **macOS, Linux, or Windows**
 - **Python 3.10+** installed
 - **Interactive Brokers account**
 - **Claude Desktop** or **Claude Code (VS Code)**
@@ -42,9 +43,9 @@ IB Gateway is a lightweight app that allows API access to your IBKR account.
 
 > **Note:** IBKR Desktop app does NOT support API connections. You need IB Gateway or TWS.
 
-### Step 2: Get a Finnhub API Key (Free)
+### Step 2: Get a Finnhub API Key (Optional)
 
-Finnhub provides financial news and sentiment data.
+Finnhub provides additional news and social sentiment data. **This is optional** - IB native news works without it.
 
 1. Sign up at: https://finnhub.io/register
 2. Copy your API key from the dashboard
@@ -58,8 +59,12 @@ git clone https://github.com/vinbg/ib-mcp-server.git
 cd ib-mcp-server
 
 # Run the setup script
+# Mac/Linux:
 chmod +x setup.sh
 ./setup.sh
+
+# Windows:
+setup.bat
 ```
 
 The setup script will:
@@ -120,7 +125,12 @@ Now you can ask Claude about crypto social sentiment alongside your IBKR portfol
 
 ---
 
-## Available Tools
+## Available Tools (22 total)
+
+### Comprehensive News (RECOMMENDED)
+| Tool | Description |
+|------|-------------|
+| `get_comprehensive_news` | **All-in-one news analysis** - combines IB news, Finnhub news, social sentiment, insider sentiment, and AI-analyzed scores |
 
 ### Portfolio Tools (requires IB Gateway)
 | Tool | Description |
@@ -140,16 +150,27 @@ Now you can ask Claude about crypto social sentiment alongside your IBKR portfol
 | `get_contract_details` | Symbol info, trading hours |
 | `search_symbols` | Find contracts by name |
 
-### News & Sentiment Tools (requires Finnhub API)
+### IB Native News Tools (requires IB Gateway)
+| Tool | Description |
+|------|-------------|
+| `get_ib_news_providers` | List available news sources (Reuters, Dow Jones, etc.) |
+| `get_ib_news` | Get historical news from IB for a symbol |
+| `get_ib_news_article` | Get full article text by article ID |
+
+### Finnhub News & Sentiment Tools (requires Finnhub API)
 | Tool | Description |
 |------|-------------|
 | `search_news` | Search by symbol or keyword |
 | `get_company_news` | Company-specific headlines |
 | `get_market_news` | General market news |
-| `analyze_news_sentiment` | AI sentiment analysis on news |
 | `get_social_sentiment` | Reddit/Twitter sentiment metrics |
-| `analyze_text_sentiment` | Analyze any custom text |
 | `get_insider_sentiment` | Insider trading signals |
+
+### Sentiment Analysis Tools
+| Tool | Description |
+|------|-------------|
+| `analyze_news_sentiment` | AI sentiment analysis on news |
+| `analyze_text_sentiment` | Analyze any custom text |
 
 ### Utility Tools
 | Tool | Description |
@@ -250,11 +271,13 @@ asyncio.run(test())
 
 ```
 ib-mcp-server/
-├── setup.sh              # Easy setup script
+├── setup.sh              # Mac/Linux setup script
+├── setup.bat             # Windows setup script
 ├── pyproject.toml        # Python dependencies
 ├── .env.example          # Configuration template
 ├── .env                  # Your configuration (gitignored)
 ├── README.md             # This file
+├── claude.md             # Claude Code documentation
 └── src/ib_mcp/
     ├── server.py         # MCP server entry point
     ├── config.py         # Configuration management
