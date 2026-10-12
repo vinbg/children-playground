@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Предложение за детска площадка зад бл. 602, ж.к. Дружба, по инициативата „Идеи за града 2027“.">
+<title>Детска площадка зад бл. 602</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column; the site plan is the hero, controls sit beside it on wide screens and under it on phones. */
+:root {
+  --paper: #f2f5f1;
+  --panel: #ffffff;
+  --ink: #1a292e;
+  --muted: #5a6b6e;
+  --rule: #d3dcd7;
+  --accent: #1d6a8a;
+  --rubber: #6aa97a;
+  --rubber-2: #9fcca9;
+  --sand: #e6cd8c;
+  --toddler: #f0d77a;
+  --gravel: #b9b7ad;
+  --hedge: #3f7a4c;
+  --hazard: #d4761c;
+  --hazard-soft: rgba(212, 118, 28, 0.13);
+  --wire: #b8461f;
+  --sail: rgba(255, 255, 255, 0.78);
+  --sail-edge: #7f8c8f;
+  --shadow: rgba(16, 32, 38, 0.30);
+  --context: #e2e6e1;
+  --context-ink: #8a9693;
+  --focus: #1d6a8a;
+  --f-display: "Unbounded", "Golos Text", system-ui, sans-serif;
+  --f-body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111a1d; --panel: #172327; --ink: #e4ece8; --muted: #9db0ac; --rule: #2a3b40;
+    --accent: #6cb6d4; --rubber: #4c8a5c; --rubber-2: #3d6e4b; --sand: #b89a55; --toddler: #b79a42;
+    --gravel: #5d5c56; --hedge: #6fae7c; --hazard: #f0973f; --hazard-soft: rgba(240, 151, 63, 0.14);
+    --wire: #f07a4a; --sail: rgba(230, 236, 233, 0.55); --sail-edge: #9fb0ac; --shadow: rgba(0, 0, 0, 0.45);
+    --context: #1d2a2e; --context-ink: #7b8d8a; --focus: #6cb6d4; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111a1d; --panel: #172327; --ink: #e4ece8; --muted: #9db0ac; --rule: #2a3b40;
+  --accent: #6cb6d4; --rubber: #4c8a5c; --rubber-2: #3d6e4b; --sand: #b89a55; --toddler: #b79a42;
+  --gravel: #5d5c56; --hedge: #6fae7c; --hazard: #f0973f; --hazard-soft: rgba(240, 151, 63, 0.14);
+  --wire: #f07a4a; --sail: rgba(230, 236, 233, 0.55); --sail-edge: #9fb0ac; --shadow: rgba(0, 0, 0, 0.45);
+  --context: #1d2a2e; --context-ink: #7b8d8a; --focus: #6cb6d4; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; display: grid; gap: 40px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.7rem, 4.2vw, 2.7rem); line-height: 1.12; letter-spacing: -0.01em; }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: 1.25rem; line-height: 1.25; }
+h3 { font-size: 1rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+header { display: grid; gap: 14px; }
+.lede { font-size: 1.08rem; color: var(--ink); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 6px 0 0; padding: 14px 0 0; border-top: 1px solid var(--rule); }
+.facts div { display: grid; gap: 2px; min-width: 0; }
+.facts dt { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-family: var(--f-mono); font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+
+.plan { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.board { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 10px; min-width: 0; }
+.board svg { display: block; width: 100%; height: auto; }
+.side { display: grid; gap: 16px; min-width: 0; }
+.ctl { display: grid; gap: 10px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; width: max-content; max-width: 100%; }
+.seg button { font: 500 0.9rem var(--f-body); background: transparent; color: var(--ink); border: 0; padding: 7px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.checks { display: grid; gap: 6px; font-size: 0.92rem; }
+.checks label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.sun { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); }
+.sun .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.sun select { font: 0.9rem var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 4px 6px; }
+.sun input[type="range"] { width: 100%; accent-color: var(--accent); }
+.clock { font-family: var(--f-mono); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.readout { font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; display: grid; gap: 2px; }
+.readout b { color: var(--ink); font-weight: 500; }
+.info { padding: 12px; border-left: 3px solid var(--accent); background: var(--panel); border-radius: 0 6px 6px 0; display: grid; gap: 6px; min-height: 120px; }
+.info .k { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.info p { font-size: 0.93rem; }
+.hint { font-size: 0.82rem; color: var(--muted); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.85rem; margin-top: 10px; padding-inline: 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--rule); flex: none; }
+
+section { display: grid; gap: 14px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.cols > div { display: grid; gap: 8px; align-content: start; min-width: 0; }
+ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; max-width: 68ch; }
+.zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.zone { display: grid; gap: 4px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer; text-align: left; font: inherit; color: inherit; }
+.zone:hover { border-color: var(--accent); }
+.zone .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.zone .m2 { font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.zone p { font-size: 0.9rem; color: var(--muted); }
+.zone .chip { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 6px; }
+
+.warn { border: 1px solid var(--hazard); background: var(--hazard-soft); border-radius: 6px; padding: 16px 18px; display: grid; gap: 10px; }
+.warn h2 { color: var(--ink); }
+.tag { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--hazard); }
+
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.93rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+td.n, th.n { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tfoot td { font-weight: 600; border-bottom: 0; }
+.note { font-size: 0.85rem; color: var(--muted); max-width: 80ch; }
+footer { display: grid; gap: 8px; border-top: 1px solid var(--rule); padding-top: 16px; font-size: 0.85rem; color: var(--muted); }
+footer ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+
+/* SVG plan */
+.ctx { fill: var(--context); }
+.ctx-label { fill: var(--context-ink); font: 500 1.05px var(--f-mono); letter-spacing: 0.03px; }
+.serv { fill: url(#hatch); stroke: none; }
+.wire { fill: none; stroke: var(--wire); stroke-width: 0.22; stroke-dasharray: 1.2 0.6; }
+.wire-label { fill: var(--wire); font: 500 0.95px var(--f-mono); }
+.fence { fill: none; stroke: var(--ink); stroke-width: 0.16; }
+.gravel { fill: var(--gravel); }
+.z { stroke: var(--panel); stroke-width: 0.12; cursor: pointer; transition: opacity .15s; }
+.z:hover { opacity: 0.85; }
+.z.sel { stroke: var(--ink); stroke-width: 0.22; }
+.z-main, .z-move, .z-rest, .z-floor { fill: var(--rubber); }
+.z-swing { fill: var(--rubber-2); }
+.z-toddler { fill: var(--toddler); }
+.tech { fill: var(--gravel); stroke: var(--ink); stroke-width: 0.1; stroke-dasharray: 0.4 0.3; cursor: pointer; }
+.hedge { fill: var(--hedge); cursor: pointer; }
+.tower { fill: none; stroke: var(--ink); stroke-width: 0.18; }
+.equip { fill: var(--panel); stroke: var(--ink); stroke-width: 0.12; }
+.equip-sand { fill: var(--sand); stroke: var(--ink); stroke-width: 0.12; }
+.safe { fill: none; stroke: var(--ink); stroke-width: 0.08; stroke-dasharray: 0.35 0.25; opacity: 0.6; }
+.sail { fill: var(--sail); stroke: var(--sail-edge); stroke-width: 0.1; }
+.shade { fill: var(--shadow); }
+.gate { fill: var(--accent); }
+.lab { fill: var(--ink); font: 500 0.82px var(--f-body); pointer-events: none; }
+.lab-s { fill: var(--ink); font: 400 0.62px var(--f-body); pointer-events: none; opacity: 0.85; }
+.north { fill: var(--ink); font: 700 1.1px var(--f-mono); }
+.scale { stroke: var(--ink); stroke-width: 0.15; fill: none; }
+.scale-t { fill: var(--ink); font: 400 0.75px var(--f-mono); }
+.sunray { stroke: var(--hazard); stroke-width: 0.18; fill: none; }
+.sundot { fill: var(--hazard); }
+.layer-hidden { display: none; }
+
+@media (max-width: 860px) {
+  .plan { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .wrap { padding-inline: 16px; }
+  body { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .z { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Идеи за града 2027 · Районен граждански бюджет · район „Искър“</div>
+    <h1>Детска площадка зад бл. 602</h1>
+    <p class="lede">Предложение да превърнем неизползваемата кучешка площадка с чакъл в ж.к. „Дружба“ в детска площадка с гумена настилка, пясъчник, съоръжения за катерене и сенници.</p>
+    <dl class="facts">
+      <div><dt>Имот</dt><dd>ПИ 68134.1500.2678</dd></div>
+      <div><dt>Площ по кадастър</dt><dd>671 м²</dd></div>
+      <div><dt>Собственост</dt><dd>общинска публична</dd></div>
+      <div><dt>Предназначение</dt><dd>друг вид озеленени площи</dd></div>
+      <div><dt>Ориентировъчен бюджет</dt><dd id="fact-budget">€87 000 с ДДС</dd></div>
+    </dl>
+  </header>
+
+  <section aria-labelledby="plan-h">
+    <h2 id="plan-h">Разпределение</h2>
+    <div class="plan">
+      <div class="board">
+        <svg id="plan" viewBox="-24 -25 52 48" role="img" aria-label="Схема на предлаганата детска площадка с зоните, стълбовете на електропровода и сервитутната зона"></svg>
+        <div class="legend" id="legend"></div>
+      </div>
+      <aside class="side">
+        <div class="ctl">
+          <div class="seg" role="group" aria-label="Изглед">
+            <button type="button" id="v-new" aria-pressed="true">Предложение</button>
+            <button type="button" id="v-now" aria-pressed="false">Сега</button>
+          </div>
+          <div class="checks">
+            <label><input type="checkbox" id="l-serv" checked> Сервитут на ВЛ 110 kV (14 м от оста)</label>
+            <label><input type="checkbox" id="l-safe" checked> Зони за безопасност на съоръженията</label>
+            <label><input type="checkbox" id="l-shade" checked> Сянка от сенниците</label>
+          </div>
+        </div>
+        <div class="sun">
+          <div class="row">
+            <span class="clock" id="clock">15:00</span>
+            <select id="day" aria-label="Дата">
+              <option value="6-21" selected>21 юни</option>
+              <option value="8-1">1 август</option>
+              <option value="9-15">15 септември</option>
+            </select>
+          </div>
+          <input type="range" id="time" min="330" max="1230" step="15" value="900" aria-label="Час от деня">
+          <div class="readout" id="readout"></div>
+        </div>
+        <div class="info" id="info" aria-live="polite"></div>
+        <p class="hint">Изберете зона на схемата или от списъка по-долу. Контурът е по сателитна снимка и е с точност около 1–2 м.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="why-h">
+    <h2 id="why-h">Защо тук</h2>
+    <div class="cols">
+      <div>
+        <h3>Кучешката площадка не се използва</h3>
+        <ul class="plain">
+          <li>Настилката е чакъл. През лятото се нагрява и пари на лапите, затова кучета идват само рано сутрин или късно вечер.</li>
+          <li>Мястото е изцяло открито, без никаква сянка.</li>
+          <li>През зимата площадката практически не се ползва.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Децата играят по паркингите</h3>
+        <ul class="plain">
+          <li>Около новите сгради (бл. 602, 602А/Б, 612, 639, комплекс Green Life) няма изградена детска площадка.</li>
+          <li>Децата играят на асфалтираните паркинги около блоковете, между движещи се коли.</li>
+          <li>Най-близката площадка е от другата страна на ул. „Капитан Димитър Списаревски“. До нея се стига трудно заради топлопровода, а малките деца не могат да пресичат сами.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="zones-h">
+    <h2 id="zones-h">Какво предлагаме</h2>
+    <div class="zones" id="zone-list"></div>
+  </section>
+
+  <section class="warn" aria-labelledby="hv-h">
+    <div class="tag">Ограничение, което определя проекта</div>
+    <h2 id="hv-h">Над имота минават два електропровода 110 kV</h2>
+    <p>Ъгловите стълбове на линиите „Горубляне–Абдовица“ и „Герман–Слатина“ са в двата западни ъгъла на имота. Целият имот е в сервитутната им зона. За съществуващи линии 110 kV в населено място тя е по 14 м от двете страни на оста.</p>
+    <div class="cols">
+      <div>
+        <h3>В сервитутната зона не се допуска</h3>
+        <ul class="plain">
+          <li>застрояване от всякакъв вид;</li>
+          <li>засаждане на трайни дървесни насаждения, тоест дървета;</li>
+          <li>паркиране и складиране.</li>
+        </ul>
+        <p class="note">Наредба № 16 от 2004 г. за сервитутите на енергийните обекти, чл. 14, ал. 1.</p>
+      </div>
+      <div>
+        <h3>Как го отчитаме</h3>
+        <ul class="plain">
+          <li>Без дървета в имота. Сянката идва от два сенника на ниски колони (около 3 м) и от светла настилка, която се нагрява по-малко.</li>
+          <li>Нисък жив плет от храсти до 1,2 м към паркинга, само ако ЕСО го допусне.</li>
+          <li>Съоръженията са ниски (до около 3 м) и стоят далеч от основите на стълбовете.</li>
+          <li>Предвиждаме писмено становище от ЕСО ЕАД още при проектирането.</li>
+          <li>На табелата на входа има забрана за хвърчила, както изисква Наредба № 1 от 2009 г. при надземни електропроводи.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="budget-h">
+    <h2 id="budget-h">Ориентировъчен бюджет</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Дейност</th><th class="n">€ с ДДС</th></tr></thead>
+        <tbody id="budget-rows"></tbody>
+        <tfoot><tr><td>Общо</td><td class="n" id="budget-total"></td></tr></tfoot>
+      </table>
+    </div>
+    <p class="note">Сумите са ориентировъчни, по пазарни нива за подобни площадки. Не са оферти. Окончателната стойност се определя от районната администрация при проектирането и обществената поръчка.</p>
+  </section>
+
+  <footer>
+    <p>Предложение от живущи в района за инициативата „Идеи за града 2027“ на Столична община. Страницата не е официален документ на общината.</p>
+    <ul>
+      <li><a href="https://reshava.sofia.bg/processes/idei-za-grada-2027" target="_blank" rel="noopener">„Идеи за града 2027“ на „Решава София“</a></li>
+      <li><a href="https://council.sofia.bg/documents/d/guest/r-733_pr-1" target="_blank" rel="noopener">Методология на програма „Граждански бюджет“ (Решение № 733 на СОС)</a></li>
+      <li><a href="https://dv.parliament.bg/DVWeb/showMaterialDV.jsp?idMat=147580" target="_blank" rel="noopener">Изменение на Наредба № 16 за сервитутите на енергийните обекти</a></li>
+      <li><a href="https://www.mrrb.bg/static/media/ups/articles/attachments/%D0%9D%D0%B0%D1%80%D0%B5%D0%B4%D0%B1%D0%B0%20%E2%84%96%201%20%D0%BE%D1%82%2012%20%D1%8F%D0%BD%D1%83%D0%B0%D1%80%D0%B8%202009%20%D0%B3.%20%D0%B7%D0%B0%20%D1%83%D1%81%D0%BB%D0%BE%D0%B2%D0%B8%D1%8F%D1%82%D0%B0%20%D0%B8%20%D1%80%D0%B5%D0%B4%D0%B0%20%D0%B7%D0%B0%20%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D1%82%D0%BE%20%D0%B8%20%D0%B1%D0%B5%D0%B7%D0%BE%D0%BF%D0%B0%D1%81%D0%BD%D0%BE%D1%81%D1%82%D1%82%D0%B0%20%D0%BD%D0%B0%20%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%BA%D0%B8%D1%82%D0%B5%20%D0%B7%D0%B0%20%D0%B8%D0%B3%D1%80%D0%B0acb608cd42bf6117a901ecec6bb778c6.pdf" target="_blank" rel="noopener">Наредба № 1 от 2009 г. за площадките за игра</a></li>
+      <li>Трасета и стълбове на електропроводите: © участниците в OpenStreetMap (ODbL). Данни за имота: КАИС, Агенция по геодезия, картография и кадастър.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var G = {"fence":[[[-9.19,14.55],[-0.13,13.73],[9.75,10.98],[12.77,3.84],[11.95,-2.2],[4.26,-11.53],[-11.66,-3.84]]],"tech":[[[-8.24,-5.24],[-8.29,-5.47],[-11.66,-3.84],[-11.16,-0.12],[-10.93,-0.2],[-10.53,-0.39],[-10.15,-0.62],[-9.8,-0.88],[-9.47,-1.18],[-9.17,-1.51],[-8.91,-1.86],[-8.68,-2.24],[-8.49,-2.64],[-8.34,-3.05],[-8.24,-3.48],[-8.17,-3.92],[-8.15,-4.36],[-8.17,-4.8]],[[-4.95,13.52],[-5.05,13.09],[-5.2,12.68],[-5.39,12.28],[-5.62,11.9],[-5.88,11.55],[-6.18,11.22],[-6.51,10.92],[-6.86,10.66],[-7.24,10.43],[-7.64,10.24],[-8.05,10.09],[-8.48,9.99],[-8.92,9.92],[-9.36,9.9],[-9.8,9.92],[-9.81,9.92],[-9.19,14.55],[-4.87,14.16],[-4.88,13.96]]],"hedge":[[[9.16,10.31],[1.5,12.45],[1.58,12.48],[1.67,12.52],[1.76,12.57],[1.83,12.63],[1.91,12.69],[1.97,12.77],[2.03,12.84],[2.08,12.93],[2.12,13.02],[2.15,13.09],[9.75,10.98],[12.77,3.84],[12.5,1.88],[12.5,1.88],[12.4,1.9],[12.3,1.9],[12.2,1.9],[12.1,1.88],[12.01,1.86],[11.92,1.82],[11.83,1.78],[11.74,1.73],[11.67,1.68],[11.95,3.73]],[[11.95,-2.2],[4.26,-11.53],[3.64,-11.02],[11.19,-1.87],[11.49,0.32],[11.53,0.27],[11.59,0.19],[11.67,0.13],[11.74,0.07],[11.83,0.02],[11.92,-0.02],[12.01,-0.06],[12.1,-0.08],[12.2,-0.1],[12.24,-0.1]],[[-0.13,13.73],[0.23,13.63],[0.22,13.6],[0.2,13.5],[0.2,13.4],[0.2,13.3],[0.22,13.2],[0.24,13.11],[0.28,13.02],[0.32,12.93],[0.37,12.84],[0.43,12.77],[0.45,12.74],[-0.34,12.96]]],"zones":{"toddler":{"poly":[[[9.16,10.31],[11.75,4.2],[1.5,4.2],[1.5,12.45]]],"area":63},"move":{"poly":[[[-9.81,9.92],[-9.8,9.92],[-9.36,9.9],[-8.92,9.92],[-8.48,9.99],[-8.05,10.09],[-7.64,10.24],[-7.24,10.43],[-6.86,10.66],[-6.51,10.92],[-6.18,11.22],[-5.88,11.55],[-5.62,11.9],[-5.39,12.28],[-5.2,12.68],[-5.05,13.09],[-4.95,13.52],[-4.88,13.96],[-4.87,14.16],[-0.13,13.73],[-0.34,12.96],[1.5,12.45],[1.5,4.2],[-10.58,4.2]]],"area":95},"main":{"poly":[[[-8.49,-2.64],[-8.68,-2.24],[-8.91,-1.86],[-9.17,-1.51],[-9.47,-1.18],[-9.8,-0.88],[-10.15,-0.62],[-10.53,-0.39],[-10.93,-0.2],[-11.16,-0.12],[-10.58,4.2],[8.0,4.2],[8.0,-3.0],[-8.36,-3.0]]],"area":131},"rest":{"poly":[[[11.95,3.73],[11.19,-1.87],[10.25,-3.0],[8.0,-3.0],[8.0,4.2],[11.75,4.2]]],"area":25},"swing":{"poly":[[[3.64,-11.02],[4.26,-11.53],[-1.5,-8.75],[-1.5,-3.0],[10.25,-3.0]]],"area":63},"floor":{"poly":[[[-8.24,-5.24],[-8.17,-4.8],[-8.15,-4.36],[-8.17,-3.92],[-8.24,-3.48],[-8.34,-3.05],[-8.36,-3.0],[-1.5,-3.0],[-1.5,-8.75],[-8.29,-5.47]]],"area":28}},"towers":[[-9.36,14.4],[-12.65,-4.36]],"serv":[[[-18.46,-17.12],[-19.57,-16.54],[-20.63,-15.87],[-21.62,-15.11],[-22.54,-14.26],[-23.38,-13.33],[-34.0,-0.51],[-34.0,34.0],[-7.28,34.0],[-0.56,25.72],[40.0,6.78],[40.0,-34.0],[18.19,-34.0]]],"lines":{"Горубляне–Абдовица":[[-101.6,128.0],[-9.4,14.4],[221.0,-93.2]],"Герман–Слатина":[[-181.5,199.6],[-12.6,-4.4],[189.5,-97.5]]}};
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("plan");
+  var LAT = 42.65761, LON = 23.397104;
+
+  var ZONES = {
+    toddler: { name: "Зона 0–3 г.", color: "var(--toddler)", text: "Пясъчник 3 × 3 м с капак, две пружинни люлки и къщичка с ниска пързалка. Цялата зона е под сенник, както изисква Наредба № 1 за деца до 3 години." },
+    move: { name: "Зона за движение 3–8 г.", color: "var(--rubber)", text: "Балансиращи греди, тунел за пълзене и пейка. Ниски елементи, далеч от основата на стълба." },
+    main: { name: "Основна зона 3–12 г.", color: "var(--rubber)", text: "Комбинирано съоръжение с кула, пързалка, стена и мрежа за катерене, с височина до около 3 м. Останалото е свободна площ за игра." },
+    rest: { name: "Място за родители", color: "var(--rubber)", text: "Две пейки под сенник, входна врата откъм улицата, кошче и информационна табела по Наредба № 1." },
+    swing: { name: "Люлки", color: "var(--rubber-2)", text: "Двойна люлка с обикновена и бебешка седалка. Зоната за безопасност остава свободна от други съоръжения." },
+    floor: { name: "Игри по настилката", color: "var(--rubber)", text: "Дама, „школа“ и лабиринт, нарисувани върху гумената настилка. Почти без разход и без нищо високо." }
+  };
+  var EXTRA = {
+    tech: { name: "Техническа зона на стълба", color: "var(--gravel)", text: "Около основите на двата стълба остава чакъл, без съоръжения, с ниска ограда. Така има достъп за поддръжка от ЕСО и децата не стигат до стълба." },
+    hedge: { name: "Нисък жив плет", color: "var(--hedge)", text: "Храсти до 1,2 м покрай паркинга. Отделят площадката от колите (Наредба № 1, чл. 7). Засаждат се само с писмено съгласие на ЕСО, защото имотът е в сервитута." },
+    serv: { name: "Сервитут на ВЛ 110 kV", color: "var(--hazard)", text: "Ивица по 14 м от двете страни на оста на всеки електропровод. В нея не се допускат застрояване, дървета, паркиране и складиране (Наредба № 16, чл. 14)." },
+    now: { name: "Сега: кучешка площадка", color: "var(--gravel)", text: "Оградена площ около 460 м² с чакъл и съоръжения за кучета. Без сянка. През лятото чакълът се нагрява и площадката почти не се ползва." }
+  };
+
+  var BUDGET = [
+    ["Проектиране, геодезия, съгласуване с ЕСО ЕАД и районната администрация", 5000],
+    ["Демонтаж на кучешките съоръжения и чакъла, основа от трошен камък, бордюри", 8000],
+    ["Ударопоглъщаща гумена настилка в светли цветове, около 395 м²", 24000],
+    ["Комбинирано съоръжение за 3–12 г. (кула, пързалка, катерене)", 13000],
+    ["Двойна люлка с обикновена и бебешка седалка", 3500],
+    ["Зона 0–3 г.: пясъчник с капак, 2 пружинни люлки, къщичка с пързалка", 8000],
+    ["Балансиращи греди, тунел и игри, нарисувани по настилката", 3000],
+    ["Два сенника с колони, фундаменти и заземяване", 8000],
+    ["Ремонт на оградата и 2 самозатварящи се врати", 3000],
+    ["4 пейки, 3 кошчета, информационна табела", 3000],
+    ["Нисък жив плет (храсти до 1,2 м) и поливане първата година", 1500],
+    ["Оценка на съответствието, регистрация и надзор", 3000],
+    ["Непредвидени разходи (около 5%)", 4000]
+  ];
+
+  // Sails: polygon in metres (east, north) and height of the fabric above ground.
+  var SAILS = [
+    { pts: [[2.0, 11.6], [9.3, 9.7], [10.1, 5.0], [2.2, 4.8]], h: 3.2 },
+    { pts: [[8.3, 3.9], [11.9, 3.9], [11.4, -2.8], [8.3, -2.8]], h: 3.0 }
+  ];
+  var SANDBOX = [4.5, 6.5, 3, 3];
+  var BENCHES = [[10.0, 1.2, 0.6, 1.8], [10.0, -1.8, 0.6, 1.8], [-6.6, 5.0, 1.8, 0.6], [5.0, 10.2, 1.8, 0.55]];
+
+  function el(name, attrs, parent) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function pathFrom(rings) {
+    return rings.map(function (r) {
+      return "M" + r.map(function (p) { return p[0].toFixed(2) + " " + (-p[1]).toFixed(2); }).join("L") + "Z";
+    }).join("");
+  }
+  function line(pts) { return "M" + pts.map(function (p) { return p[0] + " " + (-p[1]); }).join("L"); }
+  function rect(x, y, w, h, cls, parent) { return el("rect", { x: x, y: -(y + h), width: w, height: h, "class": cls }, parent); }
+  function text(x, y, s, cls, parent, anchor) {
+    var t = el("text", { x: x, y: -y, "class": cls, "text-anchor": anchor || "middle" }, parent);
+    t.textContent = s; return t;
+  }
+
+  // ---------- draw ----------
+  var defs = el("defs", {}, svg);
+  var pat = el("pattern", { id: "hatch", width: 0.9, height: 0.9, patternUnits: "userSpaceOnUse", patternTransform: "rotate(35)" }, defs);
+  el("rect", { width: 0.9, height: 0.9, fill: "var(--hazard-soft)" }, pat);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 0.9, stroke: "var(--hazard)", "stroke-width": 0.12, opacity: 0.55 }, pat);
+
+  var gCtx = el("g", {}, svg);
+  // street with heating pipe to the north-east, parking strips, block 602 to the south-west (schematic)
+  el("path", { d: line([[-30, 39.5], [40, 9.4], [40, 4.2], [-30, 34.3]]) + "Z", "class": "ctx" }, gCtx);
+  var st = text(0, 23.2, "ул. „Кап. Д. Списаревски“ · топлопровод", "ctx-label", gCtx, "start");
+  st.setAttribute("transform", "rotate(23.3 0 -23.2)");
+  el("path", { d: line([[-1, 15.3], [10.8, 12.0], [14.5, 3.6], [19, 5], [14.4, 16.2], [-0.6, 20.3]]) + "Z", "class": "ctx" }, gCtx);
+  text(9.2, 15.7, "паркинг", "ctx-label", gCtx);
+  el("path", { d: line([[13.4, -2.4], [5.2, -12.6], [8.2, -15.6], [17.6, -4.6]]) + "Z", "class": "ctx" }, gCtx);
+  var pk = text(10.8, -9.2, "паркинг / алея", "ctx-label", gCtx);
+  pk.setAttribute("transform", "rotate(-50.5 10.8 9.2)");
+  text(-23.2, -21.6, "← бл. 602А/Б („Авигея“), около 30 м", "ctx-label", gCtx, "start");
+
+  var gServ = el("g", { id: "g-serv" }, svg);
+  var servPath = el("path", { d: pathFrom(G.serv), "class": "serv", "fill-rule": "evenodd" }, gServ);
+  servPath.addEventListener("click", function () { show("serv"); });
+
+  var gNow = el("g", { id: "g-now", "class": "layer-hidden" }, svg);
+  el("path", { d: pathFrom(G.fence), "class": "gravel" }, gNow).addEventListener("click", function () { show("now"); });
+  text(1.2, 2.2, "кучешка площадка", "lab", gNow);
+  text(1.2, 1.2, "чакъл, без сянка", "lab-s", gNow);
+  [[-4, -4, 3.2, 0.4], [2.5, -5.5, 0.3, 2.5], [5, 5, 2.2, 0.8]].forEach(function (r) { rect(r[0], r[1], r[2], r[3], "equip", gNow); });
+
+  var gNew = el("g", { id: "g-new" }, svg);
+  var zoneEls = {};
+  Object.keys(ZONES).forEach(function (k) {
+    var p = el("path", { d: pathFrom(G.zones[k].poly), "class": "z z-" + k, tabindex: 0, role: "button", "aria-label": ZONES[k].name }, gNew);
+    p.addEventListener("click", function () { show(k); });
+    p.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(k); } });
+    zoneEls[k] = p;
+  });
+  el("path", { d: pathFrom(G.tech), "class": "tech" }, gNew).addEventListener("click", function () { show("tech"); });
+  el("path", { d: pathFrom(G.hedge), "class": "hedge" }, gNew).addEventListener("click", function () { show("hedge"); });
+
+  // equipment
+  var gEq = el("g", {}, gNew);
+  rect(SANDBOX[0], SANDBOX[1], SANDBOX[2], SANDBOX[3], "equip-sand", gEq);
+  rect(2.3, 8.8, 2.3, 2.2, "equip", gEq);
+  el("circle", { cx: 3.3, cy: -6.2, r: 0.5, "class": "equip" }, gEq);
+  el("circle", { cx: 8.8, cy: -6.3, r: 0.5, "class": "equip" }, gEq);
+  rect(-6.0, -0.9, 5.5, 3.0, "equip", gEq);
+  rect(-4.6, -0.4, 1.4, 2.0, "equip", gEq);
+  rect(0.9, -6.45, 3.8, 0.3, "equip", gEq);
+  rect(1.5, -7.0, 0.8, 0.35, "equip", gEq);
+  rect(3.3, -7.0, 0.8, 0.35, "equip", gEq);
+  el("path", { d: line([[-6.2, 9.2], [-3.2, 10.6]]), "class": "equip", "stroke-width": 0.35 }, gEq);
+  el("path", { d: line([[-2.6, 7.6], [0.4, 8.8]]), "class": "equip", "stroke-width": 0.35 }, gEq);
+  rect(-4.8, 6.4, 2.4, 0.9, "equip", gEq);
+  BENCHES.forEach(function (b) { rect(b[0], b[1], b[2], b[3], "equip", gEq); });
+  [[-6.0, -5.4], [-5.0, -5.4], [-6.0, -4.4], [-5.0, -4.4], [-4.0, -4.9]].forEach(function (c) { rect(c[0], c[1], 0.9, 0.9, "equip", gEq); });
+
+  var gSafe = el("g", { id: "g-safe" }, gNew);
+  rect(-7.8, -2.7, 9.1, 6.6, "safe", gSafe);
+  rect(0.6, -9.5, 4.4, 6.4, "safe", gSafe);
+  rect(1.5, 7.6, 4.0, 4.2, "safe", gSafe);
+
+  var gShade = el("g", { id: "g-shade" }, gNew);
+  var shadeEls = SAILS.map(function () { return el("path", { "class": "shade" }, gShade); });
+  var gSail = el("g", {}, gNew);
+  SAILS.forEach(function (s) { el("path", { d: pathFrom([s.pts]), "class": "sail" }, gSail); });
+
+  // gates
+  rect(0.7, 13.25, 1.0, 0.45, "gate", gNew);
+  rect(12.25, 0.4, 0.45, 1.0, "gate", gNew);
+
+  // labels
+  text(6.0, 9.6, "пясъчник", "lab-s", gNew);
+  text(3.45, 11.3, "къщичка", "lab-s", gNew);
+  text(5.6, 5.4, "0–3 г.", "lab", gNew);
+  text(-3.2, 2.6, "катерене и пързалка", "lab-s", gNew);
+  text(-2.8, -1.9, "3–12 г.", "lab", gNew);
+  text(4.6, 0.6, "свободна площ", "lab-s", gNew);
+  text(2.8, -8.4, "люлки", "lab", gNew);
+  text(-2.6, 10.9, "греди, тунел", "lab-s", gNew);
+  text(-3.3, -6.0, "игри по настилката", "lab-s", gNew);
+  text(9.4, -2.4, "пейки", "lab-s", gNew);
+  text(1.2, 14.5, "вход", "lab-s", gNew);
+  text(13.7, 2.0, "вход", "lab-s", gNew, "start");
+
+  // power lines and towers on top
+  var gWire = el("g", {}, svg);
+  Object.keys(G.lines).forEach(function (name) { el("path", { d: line(G.lines[name]), "class": "wire" }, gWire); });
+  G.towers.forEach(function (t) {
+    rect(t[0] - 2.5, t[1] - 2.5, 5, 5, "tower", gWire);
+    el("path", { d: line([[t[0] - 2.5, t[1] - 2.5], [t[0] + 2.5, t[1] + 2.5]]) + line([[t[0] - 2.5, t[1] + 2.5], [t[0] + 2.5, t[1] - 2.5]]), "class": "tower" }, gWire);
+  });
+  var w1 = text(13.6, 4.4, "ВЛ 110 kV Горубляне–Абдовица", "wire-label", gWire, "start");
+  w1.setAttribute("transform", "rotate(25 13.6 -4.4)");
+  var w2 = text(12.0, -15.0, "ВЛ 110 kV Герман–Слатина", "wire-label", gWire, "start");
+  w2.setAttribute("transform", "rotate(24.7 12 15)");
+  text(-9.36, 18.0, "стълб", "lab-s", gWire);
+  text(-12.65, -7.9, "стълб", "lab-s", gWire);
+
+  el("path", { d: pathFrom(G.fence), "class": "fence" }, svg);
+
+  // north arrow and scale
+  var gN = el("g", {}, svg);
+  el("path", { d: "M24 -21.6 L25 -18.6 L24 -19.2 L23 -18.6 Z", fill: "var(--ink)" }, gN);
+  text(24, 22.2, "С", "north", gN);
+  el("path", { d: "M14 21.2 L24 21.2 M14 20.8 L14 21.6 M19 20.8 L19 21.6 M24 20.8 L24 21.6", "class": "scale" }, svg);
+  text(14, -20.3, "0", "scale-t", svg);
+  text(19, -20.3, "5", "scale-t", svg);
+  text(24, -20.3, "10 м", "scale-t", svg);
+
+  // sun indicator
+  var gSun = el("g", {}, svg);
+  var sunRay = el("path", { "class": "sunray" }, gSun);
+  var sunDot = el("circle", { r: 0.7, "class": "sundot" }, gSun);
+
+  // ---------- legend ----------
+  var LEG = [["var(--toddler)", "зона 0–3 г."], ["var(--rubber)", "гумена настилка"], ["var(--rubber-2)", "люлки"], ["var(--sand)", "пясъчник"],
+    ["var(--sail)", "сенник"], ["var(--hedge)", "жив плет"], ["var(--gravel)", "техническа зона"], ["var(--hazard-soft)", "сервитут ВЛ 110 kV"], ["var(--accent)", "вход"]];
+  var legend = document.getElementById("legend");
+  LEG.forEach(function (l) {
+    var s = document.createElement("span");
+    var b = document.createElement("i"); b.className = "sw"; b.style.background = l[0];
+    s.appendChild(b); s.appendChild(document.createTextNode(l[1])); legend.appendChild(s);
+  });
+
+  // ---------- zone list and info ----------
+  var list = document.getElementById("zone-list");
+  Object.keys(ZONES).concat(["tech", "hedge"]).forEach(function (k) {
+    var z = ZONES[k] || EXTRA[k];
+    var area = G.zones[k] ? G.zones[k].area : (k === "tech" ? 28 : 26);
+    var b = document.createElement("button"); b.type = "button"; b.className = "zone";
+    b.innerHTML = '<span class="top"><strong><i class="chip" style="background:' + z.color + '"></i>' + z.name + '</strong><span class="m2">≈ ' + area + ' м²</span></span><p>' + z.text + '</p>';
+    b.addEventListener("click", function () { setView("new"); show(k); document.getElementById("plan").scrollIntoView({ behavior: "smooth", block: "center" }); });
+    list.appendChild(b);
+  });
+  var info = document.getElementById("info");
+  function show(k) {
+    var z = ZONES[k] || EXTRA[k];
+    var area = G.zones[k] ? "≈ " + G.zones[k].area + " м²" : "";
+    info.style.borderLeftColor = z.color;
+    info.innerHTML = '<div class="k">' + (area || "&nbsp;") + '</div><h3>' + z.name + '</h3><p>' + z.text + '</p>';
+    Object.keys(zoneEls).forEach(function (j) { zoneEls[j].classList.toggle("sel", j === k); });
+  }
+
+  // ---------- budget ----------
+  var tb = document.getElementById("budget-rows"); var total = 0;
+  var fmt = function (n) { return n.toLocaleString("bg-BG").replace(/ /g, " "); };
+  BUDGET.forEach(function (r) {
+    total += r[1];
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + r[0] + '</td><td class="n">' + fmt(r[1]) + "</td>";
+    tb.appendChild(tr);
+  });
+  document.getElementById("budget-total").textContent = fmt(total);
+  document.getElementById("fact-budget").textContent = "€" + fmt(total) + " с ДДС";
+
+  // ---------- sun ----------
+  function sunPos(utcMs) {
+    var rad = Math.PI / 180, d = utcMs / 86400000 + 2440587.5 - 2451545.0;
+    var g = (357.529 + 0.98560028 * d) * rad;
+    var q = 280.459 + 0.98564736 * d;
+    var L = (q + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * rad;
+    var e = (23.439 - 0.00000036 * d) * rad;
+    var ra = Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L));
+    var dec = Math.asin(Math.sin(e) * Math.sin(L));
+    var gmst = (18.697374558 + 24.06570982441908 * d) % 24;
+    var H = (gmst * 15 + LON) * rad - ra;
+    var lat = LAT * rad;
+    var alt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(H));
+    var az = Math.atan2(-Math.cos(dec) * Math.sin(H), Math.sin(dec) * Math.cos(lat) - Math.cos(dec) * Math.sin(lat) * Math.cos(H));
+    return { alt: alt / rad, az: ((az / rad) + 360) % 360 };
+  }
+  function inPoly(x, y, pts) {
+    var c = false;
+    for (var i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      var xi = pts[i][0], yi = pts[i][1], xj = pts[j][0], yj = pts[j][1];
+      if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) c = !c;
+    }
+    return c;
+  }
+  function shadeShare(r, shadows) {
+    var n = 0, hit = 0;
+    for (var i = 0; i < 10; i++) for (var j = 0; j < 10; j++) {
+      var x = r[0] + (i + 0.5) * r[2] / 10, y = r[1] + (j + 0.5) * r[3] / 10; n++;
+      for (var s = 0; s < shadows.length; s++) if (inPoly(x, y, shadows[s])) { hit++; break; }
+    }
+    return Math.round(hit / n * 100);
+  }
+  var timeEl = document.getElementById("time"), dayEl = document.getElementById("day");
+  function updateSun() {
+    var mins = +timeEl.value, md = dayEl.value.split("-");
+    var hh = Math.floor(mins / 60), mm = mins % 60;
+    document.getElementById("clock").textContent = (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm;
+    // Summer time in Bulgaria: UTC+3
+    var utc = Date.UTC(2027, +md[0] - 1, +md[1], hh - 3, mm);
+    var s = sunPos(utc);
+    var ro = document.getElementById("readout");
+    if (s.alt <= 0) {
+      shadeEls.forEach(function (p) { p.setAttribute("d", ""); });
+      sunRay.setAttribute("d", ""); sunDot.setAttribute("r", 0);
+      ro.innerHTML = "<span>Слънцето е под хоризонта.</span>";
+      return;
+    }
+    var rad = Math.PI / 180, ux = Math.sin(s.az * rad), uy = Math.cos(s.az * rad);
+    var shadows = SAILS.map(function (sl, i) {
+      var k = sl.h / Math.tan(Math.max(s.alt, 3) * rad);
+      var pts = sl.pts.map(function (p) { return [p[0] - ux * k, p[1] - uy * k]; });
+      shadeEls[i].setAttribute("d", pathFrom([pts]));
+      return pts;
+    });
+    var R = 19;
+    sunDot.setAttribute("r", 0.7);
+    sunDot.setAttribute("cx", (ux * R).toFixed(2)); sunDot.setAttribute("cy", (-uy * R).toFixed(2));
+    sunRay.setAttribute("d", "M" + (ux * R).toFixed(2) + " " + (-uy * R).toFixed(2) + " L" + (ux * (R - 3)).toFixed(2) + " " + (-uy * (R - 3)).toFixed(2));
+    var sand = shadeShare(SANDBOX, shadows);
+    var bench = Math.round((shadeShare(BENCHES[0], shadows) + shadeShare(BENCHES[1], shadows)) / 2);
+    ro.innerHTML = "<span>Слънце: височина <b>" + Math.round(s.alt) + "°</b>, азимут <b>" + Math.round(s.az) + "°</b></span>" +
+      "<span>Пясъчник на сянка: <b>" + sand + "%</b></span>" +
+      "<span>Пейки при входа на сянка: <b>" + bench + "%</b></span>";
+  }
+  timeEl.addEventListener("input", updateSun);
+  dayEl.addEventListener("change", updateSun);
+
+  // ---------- view toggles ----------
+  var gNowEl = document.getElementById("g-now"), gNewEl = document.getElementById("g-new");
+  function setView(v) {
+    document.getElementById("v-new").setAttribute("aria-pressed", v === "new");
+    document.getElementById("v-now").setAttribute("aria-pressed", v === "now");
+    gNowEl.classList.toggle("layer-hidden", v !== "now");
+    gNewEl.classList.toggle("layer-hidden", v !== "new");
+    if (v === "now") show("now"); else show("toddler");
+  }
+  document.getElementById("v-new").addEventListener("click", function () { setView("new"); });
+  document.getElementById("v-now").addEventListener("click", function () { setView("now"); });
+  function bindLayer(id, gid) {
+    var c = document.getElementById(id), g = document.getElementById(gid);
+    var f = function () { g.classList.toggle("layer-hidden", !c.checked); };
+    c.addEventListener("change", f); f();
+  }
+  bindLayer("l-serv", "g-serv"); bindLayer("l-safe", "g-safe"); bindLayer("l-shade", "g-shade");
+
+  show("toddler");
+  updateSun();
+})();
+</script>
+</body>
+</html>
