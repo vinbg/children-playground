@@ -16,7 +16,7 @@
 | [`docs/03-slance-i-syanka.md`](docs/03-slance-i-syanka.md) | Изчисление на слънцето и сянката през годината |
 | [`docs/04-ceni-i-byudzhet.md`](docs/04-ceni-i-byudzhet.md) | Проучване на цените и ориентировъчен бюджет |
 | [`docs/05-senici.md`](docs/05-senici.md) | Сенници и беседка: височина, материали, примери от чужбина |
-| [`docs/formulyar-chernova.docx`](docs/formulyar-chernova.docx), [`.pdf`](docs/formulyar-chernova.pdf) | Чернова на формуляра за районна идея (без лични данни) |
+| [`docs/formulyar-chernova.docx`](docs/formulyar-chernova.docx) | Чернова на формуляра за районна идея (без лични данни) |
 | [`data/geometry.json`](data/geometry.json) | Геометрията на площадката, зоните и сградите в метри |
 
 ## Източници на данни
